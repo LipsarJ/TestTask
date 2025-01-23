@@ -1,0 +1,34 @@
+[ {
+  "id" : "b0f90b78-3645-4e46-857f-25bd4724901a",
+  "costumerName" : "клиент",
+  "products" : [ {
+    "name" : "молоко",
+    "price" : 700.00
+  } ],
+  "totalPrice" : 700.00
+}, {
+  "id" : "e9be6da2-f903-4772-bf2c-e8ff5abc94c1",
+  "costumerName" : "клиент",
+  "products" : [ {
+    "name" : "масло",
+    "price" : 100.00
+  }, {
+    "name" : "молоко",
+    "price" : 700.00
+  } ],
+  "totalPrice" : 800.00
+}, {
+  "id" : "fe6c481a-4360-4e8c-98ec-cd4b736b10f7",
+  "costumerName" : "иванов иван",
+  "products" : [ {
+    "name" : "масло",
+    "price" : 100.00
+  }, {
+    "name" : "молоко",
+    "price" : 700.00
+  }, {
+    "name" : "рыба",
+    "price" : 500.00
+  } ],
+  "totalPrice" : 1300.00
+} ]
