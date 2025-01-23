@@ -48,6 +48,13 @@
         user = dbUser
         password = dbPassword
         }
+    Так же, в нём нужно проверить правильность введённых данных для подключения к базе данных:
+    def dbUser = System.getenv('DATABASE_USER') ?: 'postgres'
+    def dbPassword = System.getenv('DATABASE_PASSWORD') ?: 'Notna20002'
+    def dbHost = System.getenv('DATABASE_HOST') ?: 'localhost'
+    def dbPort = System.getenv('DATABASE_PORT') ?: 5432
+    def dbName = System.getenv('DATABASE_NAME') ?: 'postgres'
+    def dbUrl = System.getenv('DATABASE_URL') ?: "jdbc:postgresql://$dbHost:$dbPort/$dbName"
 
 Использование Flyway для миграции
 
