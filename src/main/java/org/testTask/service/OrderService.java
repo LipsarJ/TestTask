@@ -40,7 +40,9 @@ public class OrderService {
             requestOrderDTO.setCostumerName(requestOrderDTO.getCostumerName().toLowerCase());
             Set<Product> products = new HashSet<>();
             for (RequestProductDTO requestProductDTO : requestOrderDTO.getProducts()) {
-                products.add(productRepo.findByName(requestProductDTO.getName()));
+                Product product = productRepo.findByName(requestProductDTO.getName())
+                        .orElseThrow(() -> new IllegalArgumentException("Продукт с именем '" + requestProductDTO.getName() + "' не найден."));
+                products.add(product);
             }
 
             Order newOrder = orderMapper.toEntity(requestOrderDTO);
