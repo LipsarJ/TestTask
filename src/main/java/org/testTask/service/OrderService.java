@@ -1,20 +1,24 @@
 package org.testTask.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.testTask.dto.request.RequestOrderDTO;
+import org.testTask.dto.request.RequestProductDTO;
 import org.testTask.dto.response.ResponseOrderDTO;
 import org.testTask.entity.Order;
 import org.testTask.entity.Product;
 import org.testTask.mapper.OrderMapper;
 import org.testTask.repo.OrderRepo;
+import org.testTask.repo.ProductRepo;
 
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -23,22 +27,30 @@ import java.util.Set;
 public class OrderService {
 
     private final OrderRepo orderRepo;
+    private final ProductRepo productRepo;
     private final OrderMapper orderMapper;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
+    @Transactional
     public ResponseOrderDTO addNewOrder(RequestOrderDTO requestOrderDTO) {
         try {
             if (requestOrderDTO.getCostumerName().isEmpty()) {
                 throw new IllegalArgumentException("Имя заказчика не может быть пустым");
             }
             requestOrderDTO.setCostumerName(requestOrderDTO.getCostumerName().toLowerCase());
+            Set<Product> products = new HashSet<>();
+            for (RequestProductDTO requestProductDTO : requestOrderDTO.getProducts()) {
+                products.add(productRepo.findByName(requestProductDTO.getName()));
+            }
+
             Order newOrder = orderMapper.toEntity(requestOrderDTO);
             BigDecimal orderSum = BigDecimal.ZERO;
 
-            Set<Product> products = newOrder.getProducts();
-            if (products == null || products.isEmpty()) {
+            if (products.isEmpty()) {
                 throw new SQLIntegrityConstraintViolationException("Заказ должен содержать хотя бы один продукт.");
             }
+
+            newOrder.setProducts(products);
 
             for (Product product : products) {
                 orderSum = orderSum.add(product.getPrice());
