@@ -8,7 +8,6 @@ import org.testTask.dto.request.RequestOrderDTO;
 import org.testTask.dto.request.RequestProductDTO;
 import org.testTask.dto.response.ResponseOrderDTO;
 import org.testTask.dto.response.ResponseProductDTO;
-import org.testTask.entity.Product;
 import org.testTask.service.OrderService;
 import org.testTask.service.ProductService;
 
@@ -101,20 +100,16 @@ public class ConsoleMenu implements CommandLineRunner {
         String productNamesInput = scanner.nextLine();
         String[] productNames = productNamesInput.split(",");
 
-        Set<Product> products = new HashSet<>();
-        for (String productName : productNames) {
-            Product product = productService.findProductByName(productName.toLowerCase());
-            if (product != null) {
-                products.add(product);
-            } else if (!productName.isEmpty()) {
-                System.out.println("Продукт с именем " + productName + " не найден и будет пропущен.");
-            }
-        }
-
 
         RequestOrderDTO requestOrderDTO = new RequestOrderDTO();
         requestOrderDTO.setCostumerName(customerName);
-        requestOrderDTO.setProducts(products);
+
+        Set<RequestProductDTO> requestProductDTOS = new HashSet<>();
+        for (String productName : productNames) {
+            requestProductDTOS.add(new RequestProductDTO(productName, BigDecimal.ZERO));
+        }
+
+        requestOrderDTO.setProducts(requestProductDTOS);
 
         try {
             ResponseOrderDTO responseOrderDTO = orderService.addNewOrder(requestOrderDTO);

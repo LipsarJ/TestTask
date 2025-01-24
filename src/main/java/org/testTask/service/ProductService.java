@@ -39,8 +39,4 @@ public class ProductService {
         }
     }
 
-    public Product findProductByName(String name) {
-        return productRepo.findByName(name);
-    }
-
 }
